@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import AssetTable from "./components/AssetTable"
 
 function App(){
   const [assets, setAssets] = useState([])
@@ -13,7 +14,7 @@ function App(){
   return (
     <div className="p-8">
       <h1 className="text-2xl font-bold mb-4">IT Asset Tracker</h1>
-      <pre>{JSON.stringify(assets, null, 2)}</pre>
+      <AssetTable assets={assets} />
     </div>
   )
 }
