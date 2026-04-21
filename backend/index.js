@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import pool from './db.js';
+import assetsRouter from './routes/assets.js';
 
 dotenv.config();
 
@@ -10,6 +11,8 @@ const PORT = process.env.PORT || 3000;
 
 app.use(cors());
 app.use(express.json());
+
+app.use('/assets', assetsRouter);
 
 app.get('/', (req, res) => {
   res.json({ message: 'Asset Tracker API is running!' })
