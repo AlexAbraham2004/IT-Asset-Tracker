@@ -5,6 +5,8 @@ import AssetForm from "./components/AssetForm"
 function App(){
   const [assets, setAssets] = useState([])
   const [showForm, setShowForm] = useState(false)
+  const [filter, setFilter] = useState('all')
+
 
   useEffect(() => {
     fetch('http://localhost:3000/assets')
@@ -17,6 +19,10 @@ function App(){
     setAssets([newAsset, ...assets])
     setShowForm(false)
   }
+
+  // Return assets with selected filter or all
+  const filteredAssets = filter === 'all' ? assets : assets.filter(a => a.status === filter)
+
 
   const total = assets.length
   const available = assets.filter(a => a.status === 'available').length
@@ -65,12 +71,30 @@ function App(){
           </div>
         )}
 
+        {/* Filter bar */}
+        <div className="flex gap-2 mb-4">
+          {['all', 'available', 'checked out', 'in repair'].map(option => (
+            <button
+              key={option}
+              onClick={() => setFilter(option)}
+              className={`px-4 py-2 rounded-lg text-sm font-medium capitalize ${
+                filter === option
+                  ? 'bg-blue-600 text-white'
+                  : 'bg-white border border-gray-200 text-gray-600 hover:bg-gray-50'
+              }`}
+            >
+              {option}
+            </button>
+          ))}
+        </div>
+
+
         {/* Table */}
         <div className="bg-white rounded-lg border border-gray-200">
           <div className="px-6 py-4 border-b border-gray-200">
             <h2 className="text-lg font-semibold text-gray-800">Asset Inventory</h2>
           </div>
-          <AssetTable assets={assets} />
+          <AssetTable assets={filteredAssets} />
         </div>
       </div>
     </div>
