@@ -1,26 +1,31 @@
+const formatDate = (dateString) => {
+  if (!dateString) return '—'
+  return new Date(dateString).toLocaleDateString()
+}
+
 function AssetTable({ assets }) {
   return (
     <div className="overflow-x-auto">
       <table className="w-full border-collapse">
         <thead>
-          <tr className="bg-gray-100 text-left">
-            <th className="p-3 border">Name</th>
-            <th className="p-3 border">Type</th>
-            <th className="p-3 border">Serial Number</th>
-            <th className="p-3 border">Status</th>
-            <th className="p-3 border">Assignee</th>
-            <th className="p-3 border">Checkout Date</th>
-            <th className="p-3 border">Due Date</th>
+          <tr className="bg-gray-50 text-left border-b border-gray-200">
+            <th className="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+            <th className="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
+            <th className="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Serial Number</th>
+            <th className="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+            <th className="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Assignee</th>
+            <th className="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Checkout Date</th>
+            <th className="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Due Date</th>
           </tr>
         </thead>
-        <tbody>
-          {assets.map(asset => (
-            <tr key={asset.id} className="border-b hover:bg-gray-50">
-              <td className="p-3 border">{asset.name}</td>
-              <td className="p-3 border">{asset.type}</td>
-              <td className="p-3 border">{asset.serial_number}</td>
-              <td className="p-3 border">
-                <span className={`px-2 py-1 rounded-full text-sm font-medium ${
+        <tbody className="divide-y divide-gray-100">
+          {assets.map((asset, index) => (
+            <tr key={asset.id} className={index % 2 === 0 ? 'bg-white hover:bg-gray-50' : 'bg-gray-50 hover:bg-gray-100'}>
+              <td className="px-6 py-4 text-sm text-gray-800 font-medium">{asset.name}</td>
+              <td className="px-6 py-4 text-sm text-gray-600">{asset.type}</td>
+              <td className="px-6 py-4 text-sm text-gray-600 font-mono">{asset.serial_number}</td>
+              <td className="px-6 py-4">
+                <span className={`px-2 py-1 rounded-full text-xs font-medium ${
                   asset.status === 'available' ? 'bg-green-100 text-green-800' :
                   asset.status === 'checked out' ? 'bg-red-100 text-red-800' :
                   'bg-yellow-100 text-yellow-800'
@@ -28,9 +33,9 @@ function AssetTable({ assets }) {
                   {asset.status}
                 </span>
               </td>
-              <td className="p-3 border">{asset.assignee || '—'}</td>
-              <td className="p-3 border">{asset.checkout_date || '—'}</td>
-              <td className="p-3 border">{asset.due_date || '—'}</td>
+              <td className="px-6 py-4 text-sm text-gray-600">{asset.assignee || '—'}</td>
+              <td className="px-6 py-4 text-sm text-gray-600">{formatDate(asset.checkout_date)}</td>
+              <td className="px-6 py-4 text-sm text-gray-600">{formatDate(asset.due_date)}</td>
             </tr>
           ))}
         </tbody>
