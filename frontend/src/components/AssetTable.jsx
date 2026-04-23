@@ -3,7 +3,7 @@ const formatDate = (dateString) => {
   return new Date(dateString).toLocaleDateString()
 }
 
-function AssetTable({ assets }) {
+function AssetTable({ assets, onCheckout }) {
   return (
     <div className="overflow-x-auto">
       <table className="w-full border-collapse">
@@ -16,6 +16,7 @@ function AssetTable({ assets }) {
             <th className="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Assignee</th>
             <th className="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Checkout Date</th>
             <th className="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Due Date</th>
+            <th className="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
           </tr>
         </thead>
         <tbody className="divide-y divide-gray-100">
@@ -36,6 +37,18 @@ function AssetTable({ assets }) {
               <td className="px-6 py-4 text-sm text-gray-600">{asset.assignee || '—'}</td>
               <td className="px-6 py-4 text-sm text-gray-600">{formatDate(asset.checkout_date)}</td>
               <td className="px-6 py-4 text-sm text-gray-600">{formatDate(asset.due_date)}</td>
+              <td className="px-6 py-4">
+                <button
+                  onClick={() => onCheckout(asset)}
+                  className={`text-xs font-medium px-3 py-1 rounded-lg ${
+                    asset.status === 'checked out'
+                      ? 'bg-green-100 text-green-800 hover:bg-green-200'
+                      : 'bg-blue-100 text-blue-800 hover:bg-blue-200'
+                  }`}
+                >
+                  {asset.status === 'checked out' ? 'Return' : 'Checkout'}
+                </button>
+              </td>
             </tr>
           ))}
         </tbody>

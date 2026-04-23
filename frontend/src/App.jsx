@@ -1,12 +1,13 @@
 import { useState, useEffect } from "react";
 import AssetTable from "./components/AssetTable"
 import AssetForm from "./components/AssetForm"
+import CheckoutModal from "./components/CheckoutModal"
 
 function App(){
   const [assets, setAssets] = useState([])
   const [showForm, setShowForm] = useState(false)
   const [filter, setFilter] = useState('all')
-
+  const [selectedAsset, setSelectedAsset] = useState(null)
 
   useEffect(() => {
     fetch('http://localhost:3000/assets')
@@ -20,18 +21,19 @@ function App(){
     setShowForm(false)
   }
 
-  // Return assets with selected filter or all
-  const filteredAssets = filter === 'all' ? assets : assets.filter(a => a.status === filter)
-
+  const handleAssetUpdated = (updatedAsset) => {
+    setAssets(assets.map(a => a.id === updatedAsset.id ? updatedAsset : a))
+  }
 
   const total = assets.length
   const available = assets.filter(a => a.status === 'available').length
   const checkedOut = assets.filter(a => a.status === 'checked out').length
   const inRepair = assets.filter(a => a.status === 'in repair').length
 
+  const filteredAssets = filter === 'all' ? assets : assets.filter(a => a.status === filter)
+
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Navbar */}
       <nav className="bg-white border-b border-gray-200 px-8 py-4 flex items-center justify-between">
         <h1 className="text-xl font-semibold text-gray-800">IT Asset Tracker</h1>
         <button
@@ -43,7 +45,6 @@ function App(){
       </nav>
 
       <div className="max-w-7xl mx-auto px-8 py-8">
-        {/* Summary bar */}
         <div className="grid grid-cols-4 gap-4 mb-8">
           <div className="bg-white rounded-lg border border-gray-200 p-4">
             <p className="text-sm text-gray-500">Total</p>
@@ -63,7 +64,6 @@ function App(){
           </div>
         </div>
 
-        {/* Form */}
         {showForm && (
           <div className="bg-white rounded-lg border border-gray-200 p-6 mb-8">
             <h2 className="text-lg font-semibold text-gray-800 mb-4">Add New Asset</h2>
@@ -71,7 +71,6 @@ function App(){
           </div>
         )}
 
-        {/* Filter bar */}
         <div className="flex gap-2 mb-4">
           {['all', 'available', 'checked out', 'in repair'].map(option => (
             <button
@@ -88,15 +87,21 @@ function App(){
           ))}
         </div>
 
-
-        {/* Table */}
         <div className="bg-white rounded-lg border border-gray-200">
           <div className="px-6 py-4 border-b border-gray-200">
             <h2 className="text-lg font-semibold text-gray-800">Asset Inventory</h2>
           </div>
-          <AssetTable assets={filteredAssets} />
+          <AssetTable assets={filteredAssets} onCheckout={setSelectedAsset} />
         </div>
       </div>
+
+      {selectedAsset && (
+        <CheckoutModal
+          asset={selectedAsset}
+          onClose={() => setSelectedAsset(null)}
+          onUpdated={handleAssetUpdated}
+        />
+      )}
     </div>
   )
 }
