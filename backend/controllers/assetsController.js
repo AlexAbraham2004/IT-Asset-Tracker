@@ -16,12 +16,18 @@ export const getAllAssets = async (req, res) => {
 export const createAsset = async (req, res) => {
   const { name, type, serial_number, status, assignee, checkout_date, due_date } = req.body
     try {
+        const normalizedCheckoutDate = checkout_date || null; 
+        const normalizedDueDate = due_date || null;
         const result = await pool.query(
             'INSERT INTO assets (name, type, serial_number, status, assignee, checkout_date, due_date) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *',
-            [name, type, serial_number, status, assignee, checkout_date, due_date]
+            [name, type, serial_number, status, assignee, normalizedCheckoutDate, normalizedDueDate]
         )
         res.status(201).json(result.rows[0]);
     } catch (err) {
+        if (err.code === '23505' && err.constraint === 'assets_serial_number_key') {
+            return res.status(409).json({ error: 'Serial number already exists' });
+        }
+            
         res.status(500).json({ error: err.message })
     }
 }
