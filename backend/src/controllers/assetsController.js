@@ -1,4 +1,4 @@
-import pool from '../db.js';
+import pool from '../config/db.js';
 
 // Get all assets ordered by creation date (newest first)
 export const getAllAssets = async (req, res) => {

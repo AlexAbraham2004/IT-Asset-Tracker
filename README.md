@@ -13,19 +13,32 @@ A full-stack web application for managing IT equipment inventory. Assets such as
 
     IT-Asset-Tracker/
     ├── backend/
-    │   ├── controllers/
-    │   │   └── assetsController.js
-    │   ├── routes/
-    │   │   └── assets.js
-    │   ├── db.js
-    │   ├── index.js
-    │   └── .env.example
+    │   ├── src/
+    │   │   ├── config/
+    │   │   │   └── db.js
+    │   │   ├── controllers/
+    │   │   │   └── assetsController.js
+    │   │   ├── services/
+    │   │   │   └── assetsService.js
+    │   │   ├── models/
+    │   │   │   └── assetModel.js
+    │   │   └── routes/
+    │   │       └── assetsRoutes.js
+    │   ├── migrations/
+    │   ├── .env.example
+    │   └── index.js
     ├── frontend/
     │   ├── src/
     │   │   ├── components/
+    │   │   │   └── assets/
+    │   │   │       ├── AssetForm.jsx
+    │   │   │       ├── AssetTable.jsx
+    │   │   │       └── CheckoutModal.jsx
+    │   │   ├── pages/
+    │   │   ├── api/
     │   │   └── App.jsx
     │   └── vite.config.js
-
+    └── README.md
 
 ## Getting Started
 
@@ -51,4 +64,4 @@ npm run dev
 
 ## Status
 
-Currently in development. Backend API and database are complete. Frontend UI in progress.
+Currently in active development. Backend API and database are nearing completion. Frontend UI in progress.
