@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { uploadAsset } from "../../api/assetsApi";
 
 function AssetForm({ onAssetAdded }) {
     const [form, setForm] = useState({ 
@@ -17,13 +18,8 @@ function AssetForm({ onAssetAdded }) {
 
     const handleSubmit = (e) => {
         e.preventDefault()
-        fetch('http://localhost:3000/assets', {
-            method: 'POST' ,
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(form)
-            })
-                .then(res => res.json())
-                .then(newAsset => {
+        uploadAsset(form)
+            .then(newAsset => {
                     console.log('Asset added:', newAsset)
                     onAssetAdded(newAsset)
                     setForm({
@@ -36,6 +32,8 @@ function AssetForm({ onAssetAdded }) {
                         due_date: ''
                     })
                 })
+                
+                .catch(err => console.error('Error adding asset:', err))
     }
 
     return (

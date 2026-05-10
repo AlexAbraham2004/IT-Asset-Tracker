@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import AssetTable from "../components/assets/AssetTable"
 import AssetForm from "../components/assets/AssetForm"
 import CheckoutModal from "../components/assets/CheckoutModal"
-import { getAssets, updateAsset } from "../api/assetsApi"
+import { getAssets } from "../api/assetsApi"
 
 function AssetsPage(){
   const [assets, setAssets] = useState([])
