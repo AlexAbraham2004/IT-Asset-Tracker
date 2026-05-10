@@ -1,8 +1,8 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import pool from './db.js';
-import assetsRouter from './routes/assets.js';
+import pool from './src/config/db.js';
+import assetsRouter from './src/routes/assets.js';
 
 dotenv.config();
 
