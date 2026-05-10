@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
-import AssetTable from "./components/AssetTable"
-import AssetForm from "./components/AssetForm"
-import CheckoutModal from "./components/CheckoutModal"
+import AssetTable from "./components/assets/AssetTable"
+import AssetForm from "./components/assets/AssetForm"
+import CheckoutModal from "./components/assets/CheckoutModal"
+import { getAssets, updateAsset } from "./api/assetsApi"
 
 function App(){
   const [assets, setAssets] = useState([])
@@ -9,9 +10,8 @@ function App(){
   const [filter, setFilter] = useState('all')
   const [selectedAsset, setSelectedAsset] = useState(null)
 
-  useEffect(() => {
-    fetch('http://localhost:3000/assets')
-      .then(res => res.json())
+  useEffect(() => { 
+    getAssets()
       .then(data => setAssets(data))
       .catch(err => console.error('Error fetching assets:', err))
   }, [])
@@ -30,6 +30,13 @@ function App(){
   const checkedOut = assets.filter(a => a.status === 'checked out').length
   const inRepair = assets.filter(a => a.status === 'in repair').length
 
+  const statuses = [
+    {label: 'Total', value:total, color: 'text-gray-800'},
+    {label: 'Available', value:available, color: 'text-green-600'},
+    {label: 'Checked Out', value:checkedOut, color: 'text-red-600'},
+    {label: 'In Repair', value:inRepair, color: 'text-yellow-600'},
+  ]
+
   const filteredAssets = filter === 'all' ? assets : assets.filter(a => a.status === filter)
 
   return (
@@ -46,22 +53,12 @@ function App(){
 
       <div className="max-w-7xl mx-auto px-8 py-8">
         <div className="grid grid-cols-4 gap-4 mb-8">
-          <div className="bg-white rounded-lg border border-gray-200 p-4">
-            <p className="text-sm text-gray-500">Total</p>
-            <p className="text-2xl font-semibold text-gray-800">{total}</p>
-          </div>
-          <div className="bg-white rounded-lg border border-gray-200 p-4">
-            <p className="text-sm text-gray-500">Available</p>
-            <p className="text-2xl font-semibold text-green-600">{available}</p>
-          </div>
-          <div className="bg-white rounded-lg border border-gray-200 p-4">
-            <p className="text-sm text-gray-500">Checked Out</p>
-            <p className="text-2xl font-semibold text-red-600">{checkedOut}</p>
-          </div>
-          <div className="bg-white rounded-lg border border-gray-200 p-4">
-            <p className="text-sm text-gray-500">In Repair</p>
-            <p className="text-2xl font-semibold text-yellow-600">{inRepair}</p>
-          </div>
+          {statuses.map((status) => (
+            <div key = {status.label} className="bg-white rounded-lg border border-gray-200 p-4">
+              <p className="text-sm text-gray-500">{status.label}</p>
+              <p className="text-2xl font-semibold text-gray-800">{status.value}</p>
+            </div>
+          ))}
         </div>
 
         {showForm && (
