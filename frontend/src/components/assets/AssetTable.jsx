@@ -3,20 +3,17 @@ const formatDate = (dateString) => {
   return new Date(dateString).toLocaleDateString()
 }
 
+const headers = ['Name', 'Type', 'Serial Number', 'Status', 'Assignee', 'Checkout Date', 'Due Date', 'Action']
+
 function AssetTable({ assets, onCheckout }) {
   return (
     <div className="overflow-x-auto">
       <table className="w-full border-collapse">
         <thead>
           <tr className="bg-gray-50 text-left border-b border-gray-200">
-            <th className="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
-            <th className="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
-            <th className="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Serial Number</th>
-            <th className="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-            <th className="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Assignee</th>
-            <th className="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Checkout Date</th>
-            <th className="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Due Date</th>
-            <th className="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
+            {headers.map((header) => (
+              <th key={header} className="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">{header}</th>
+            ))}
           </tr>
         </thead>
         <tbody className="divide-y divide-gray-100">
